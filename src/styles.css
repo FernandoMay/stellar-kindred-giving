@@ -26,6 +26,7 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+  --font-display: "Space Grotesk", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -82,7 +83,6 @@
   --border: oklch(0.32 0.04 160);
   --input: oklch(0.32 0.04 160);
   --ring: oklch(0.88 0.2 128);
-  --font-display: "Space Grotesk", sans-serif;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);

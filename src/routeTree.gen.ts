@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HackathonsRouteImport } from './routes/hackathons'
+import { Route as PromocionesRouteImport } from './routes/promociones'
+import { Route as CreadoresIdRouteImport } from './routes/creadores.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HackathonsRoute = HackathonsRouteImport.update({
+  id: '/hackathons',
+  path: '/hackathons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PromocionesRoute = PromocionesRouteImport.update({
+  id: '/promociones',
+  path: '/promociones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreadoresIdRoute = CreadoresIdRouteImport.update({
+  id: '/creadores/$id',
+  path: '/creadores/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/hackathons': typeof HackathonsRoute
+  '/promociones': typeof PromocionesRoute
+  '/creadores/$id': typeof CreadoresIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/hackathons': typeof HackathonsRoute
+  '/promociones': typeof PromocionesRoute
+  '/creadores/$id': typeof CreadoresIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/hackathons': typeof HackathonsRoute
+  '/promociones': typeof PromocionesRoute
+  '/creadores/$id': typeof CreadoresIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/hackathons' | '/promociones' | '/creadores/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/hackathons' | '/promociones' | '/creadores/$id'
+  id: '__root__' | '/' | '/hackathons' | '/promociones' | '/creadores/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HackathonsRoute: typeof HackathonsRoute
+  PromocionesRoute: typeof PromocionesRoute
+  CreadoresIdRoute: typeof CreadoresIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/hackathons': {
+      id: '/hackathons'
+      path: '/hackathons'
+      fullPath: '/hackathons'
+      preLoaderRoute: typeof HackathonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/promociones': {
+      id: '/promociones'
+      path: '/promociones'
+      fullPath: '/promociones'
+      preLoaderRoute: typeof PromocionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creadores/$id': {
+      id: '/creadores/$id'
+      path: '/creadores/$id'
+      fullPath: '/creadores/$id'
+      preLoaderRoute: typeof CreadoresIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HackathonsRoute: HackathonsRoute,
+  PromocionesRoute: PromocionesRoute,
+  CreadoresIdRoute: CreadoresIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
