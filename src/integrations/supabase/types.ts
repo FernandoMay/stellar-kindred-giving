@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      stellar_payments: {
+        Row: {
+          amount: number
+          asset: string
+          confirmed_at: string
+          destination: string
+          fee_stroops: number
+          hash: string
+          indexed_at: string
+          ledger: number
+          network: string
+          source: string
+        }
+        Insert: {
+          amount: number
+          asset?: string
+          confirmed_at: string
+          destination: string
+          fee_stroops: number
+          hash: string
+          indexed_at?: string
+          ledger: number
+          network?: string
+          source: string
+        }
+        Update: {
+          amount?: number
+          asset?: string
+          confirmed_at?: string
+          destination?: string
+          fee_stroops?: number
+          hash?: string
+          indexed_at?: string
+          ledger?: number
+          network?: string
+          source?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
