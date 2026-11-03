@@ -23,7 +23,7 @@ export const Route = createFileRoute("/creadores/$id")({
 function Profile() {
   const c = Route.useLoaderData();
   const w = useWallet();
-  const [tier, setTier] = useState(giftTiers[1]);
+  const [tier, setTier] = useState(giftTiers[1]!);
   const [custom, setCustom] = useState("");
   const [msg, setMsg] = useState("");
   const [status, setStatus] = useState<{ kind: "ok" | "err" | "busy"; text: string; hash?: string } | null>(null);
