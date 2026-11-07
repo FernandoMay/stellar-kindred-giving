@@ -1,5 +1,6 @@
 // Demo data. Wallet addresses are sample Testnet accounts.
 export type Creator = {
+  demo: boolean;
   id: string;
   name: string;
   handle: string;
@@ -20,16 +21,16 @@ export const giftTiers = [
 const ADDR = "GAIH3ULLFQ4DGSECF2AR555KZ4KNDGEKN4AFI4SU2M7B43MGK3QJZNSR";
 
 export const creators: Creator[] = [
-  { id: "luna-beats", name: "Luna Beats", handle: "@lunabeats", category: "Música", emoji: "🎧", address: ADDR,
+  { demo: true, id: "luna-beats", name: "Luna Beats", handle: "@lunabeats", category: "Música", emoji: "🎧", address: ADDR,
     bio: "Productora de lo-fi en vivo cada viernes. Cada regalo financia equipo para talleres juveniles.",
     goal: { title: "Estudio comunitario", raised: 3420, target: 5000 } },
-  { id: "dev-maya", name: "Maya Codes", handle: "@mayacodes", category: "Código abierto", emoji: "💻", address: ADDR,
+  { demo: true, id: "dev-maya", name: "Maya Codes", handle: "@mayacodes", category: "Código abierto", emoji: "💻", address: ADDR,
     bio: "Mantengo librerías open source para Soroban y enseño Rust en español.",
     goal: { title: "Docs de Soroban en español", raised: 1280, target: 2000 } },
-  { id: "eco-raices", name: "Raíces Verdes", handle: "@raices", category: "Impacto social", emoji: "🌿", address: ADDR,
+  { demo: true, id: "eco-raices", name: "Raíces Verdes", handle: "@raices", category: "Impacto social", emoji: "🌿", address: ADDR,
     bio: "Reforestación urbana en Mérida. Fondos custodiados en escrow y liberados por hito.",
     goal: { title: "1,000 árboles", raised: 6100, target: 10000 } },
-  { id: "pixel-ana", name: "Ana Pixel", handle: "@anapixel", category: "Arte digital", emoji: "🎨", address: ADDR,
+  { demo: true, id: "pixel-ana", name: "Ana Pixel", handle: "@anapixel", category: "Arte digital", emoji: "🎨", address: ADDR,
     bio: "Ilustradora. Acceso exclusivo a bocetos y procesos para quienes apoyan.",
     goal: { title: "Novela gráfica", raised: 740, target: 1500 } },
 ];

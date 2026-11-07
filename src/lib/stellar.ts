@@ -1,6 +1,7 @@
 // Browser-only Stellar SDK imports; no private keys are held by the app.
 import { HORIZON, TESTNET_PASSPHRASE, validatePayment, validateWalletState } from "./payment-validation";
 export { HORIZON, EXPLORER } from "./payment-validation";
+const hex = (bytes: Uint8Array) => Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
 
 export async function walletSnapshot(expected?: string) {
   const f = await import("@stellar/freighter-api");
@@ -60,7 +61,7 @@ export async function prepareXlm(from: string, to: string, amount: string, memo:
     .addMemo(sdk.Memo.text(memo))
     .setTimeout(60)
     .build();
-  return { xdr: tx.toXDR(), hash: tx.hash().toString("hex"), fee: String(Number(fee) / 1e7), from, to, amount, memo };
+  return { xdr: tx.toXDR(), hash: hex(tx.hash()), fee: String(Number(fee) / 1e7), from, to, amount, memo };
 }
 
 export async function signAndSubmit(prepared: Awaited<ReturnType<typeof prepareXlm>>, onSigned: (hash: string) => void) {
@@ -69,7 +70,7 @@ export async function signAndSubmit(prepared: Awaited<ReturnType<typeof prepareX
   const signed = await f.signTransaction(prepared.xdr, { networkPassphrase: TESTNET_PASSPHRASE, address: prepared.from });
   if (signed.error || !signed.signedTxXdr) throw new Error("Firma rechazada; no se envió el pago.");
   const tx = sdk.TransactionBuilder.fromXDR(signed.signedTxXdr, TESTNET_PASSPHRASE);
-  if (signed.signerAddress !== prepared.from || tx.hash().toString("hex") !== prepared.hash) throw new Error("La firma no coincide con la transacción revisada.");
+  if (signed.signerAddress !== prepared.from || hex(tx.hash()) !== prepared.hash) throw new Error("La firma no coincide con la transacción revisada.");
   onSigned(prepared.hash); // Retain hash BEFORE network send; ambiguous timeout must not create another payment.
   try { await new sdk.Horizon.Server(HORIZON).submitTransaction(tx); }
   catch { /* Server reconciliation decides the ledger outcome, never the submission exception. */ }

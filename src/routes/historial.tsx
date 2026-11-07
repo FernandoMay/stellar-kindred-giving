@@ -23,6 +23,6 @@ function History() {
     <p role="status" className="mt-3 text-sm text-accent">{notice}</p>
     <div className="mt-8 flex items-center gap-4"><h2 className="font-display text-xl">Mis aportaciones</h2><Button variant="outline" onClick={w.address ? refresh : w.connect} disabled={busy}>{w.address ? "Consultar" : "Conectar Freighter"}</Button></div>
     {rows.length === 0 && <p className="mt-4 text-muted-foreground">Sin operaciones cargadas.</p>}
-    <ul className="mt-4 divide-y divide-border">{rows.map((r) => <li key={r.hash} className="flex flex-wrap justify-between gap-3 py-4"><div><p>{r.amount} {r.asset} · {short(r.source)} → {short(r.destination)}</p><p className="text-xs text-muted-foreground">{r.confirmed_at} · Ledger {r.ledger}</p></div><a href={`${EXPLORER}${r.hash}`} target="_blank" rel="noreferrer" className="text-primary underline">Ver transacción</a></li>)}</ul>
+    <ul className="mt-4 divide-y divide-border">{rows.map((r) => <li key={r.hash} className="flex flex-wrap justify-between gap-3 py-4"><div><p>{r.amount_exact} {r.asset} · {short(r.source)} → {short(r.destination)}</p><p className="text-xs text-muted-foreground">{r.confirmed_at} · Ledger {r.ledger}</p></div><a href={`${EXPLORER}${r.hash}`} target="_blank" rel="noreferrer" className="text-primary underline">Ver transacción</a></li>)}</ul>
   </main>;
 }

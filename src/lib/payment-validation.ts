@@ -4,7 +4,7 @@ export const TESTNET_PASSPHRASE = "Test SDF Network ; September 2015";
 export const HORIZON = "https://horizon-testnet.stellar.org";
 export const EXPLORER = "https://stellar.expert/explorer/testnet/tx/";
 export const amountSchema = z.string().regex(/^(0|[1-9]\d{0,12})(\.\d{1,7})?$/, "Importe inválido: máximo 7 decimales.")
-  .refine((s) => BigInt(s.split(".")[0] + (s.split(".")[1] ?? "").padEnd(7, "0")) > 0n, "El importe debe ser mayor que cero.");
+  .refine((s) => /^(0|[1-9]\d{0,12})(\.\d{1,7})?$/.test(s) && BigInt(s.split(".")[0] + (s.split(".")[1] ?? "").padEnd(7, "0")) > 0n, "El importe debe ser mayor que cero.");
 export const addressSchema = z.string().regex(/^G[A-Z2-7]{55}$/, "Dirección Stellar inválida.");
 export const hashSchema = z.string().regex(/^[a-f0-9]{64}$/, "Hash inválido.");
 export function validatePayment(from: string, to: string, amount: string, memo: string) {

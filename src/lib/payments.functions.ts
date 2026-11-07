@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
-import { addressSchema, hashSchema, HORIZON, parseLedgerPayment } from "./payment-validation";
+import { addressSchema, hashSchema } from "./payment-validation";
 
 export const reconcilePayment = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ hash: hashSchema }).parse(input))
@@ -12,7 +12,7 @@ export const reconcilePayment = createServerFn({ method: "POST" })
     const payment = await publicLedgerPayment(data.hash);
     if (!payment) return { status: "pending" as const, payment: null };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("stellar_payments").upsert(payment, { onConflict: "hash", ignoreDuplicates: true });
+    const { error } = await supabaseAdmin.from("stellar_payments").upsert({ ...payment, amount: Number(payment.amount), amount_exact: payment.amount }, { onConflict: "hash", ignoreDuplicates: true });
     if (error) throw new Error("Pago verificado; no se pudo guardar el historial. Revisa el hash de nuevo, no repitas el pago.");
     return { status: "confirmed" as const, payment };
   });
@@ -28,7 +28,7 @@ export const paymentHistory = createServerFn({ method: "GET" })
       if (key.startsWith("sb_") && headers.get("Authorization") === `Bearer ${key}`) headers.delete("Authorization");
       headers.set("apikey", key); return fetch(input, { ...init, headers });
     } } });
-    const { data: rows, error } = await client.from("stellar_payments").select("hash,source,destination,amount,asset,fee_stroops,ledger,confirmed_at").or(`source.eq.${data.address},destination.eq.${data.address}`).order("confirmed_at", { ascending: false }).limit(50);
+    const { data: rows, error } = await client.from("stellar_payments").select("hash,source,destination,amount_exact,asset,fee_stroops,ledger,confirmed_at").or(`source.eq.${data.address},destination.eq.${data.address}`).order("confirmed_at", { ascending: false }).limit(50);
     if (error) throw new Error("No se pudo consultar el historial.");
     return rows ?? [];
   });
