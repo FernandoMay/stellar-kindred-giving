@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as HackathonsRouteImport } from './routes/hackathons'
+import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as PromocionesRouteImport } from './routes/promociones'
 import { Route as CreadoresIdRouteImport } from './routes/creadores.$id'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const HackathonsRoute = HackathonsRouteImport.update({
   id: '/hackathons',
   path: '/hackathons',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistorialRoute = HistorialRouteImport.update({
+  id: '/historial',
+  path: '/historial',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PromocionesRoute = PromocionesRouteImport.update({
@@ -38,12 +44,14 @@ const CreadoresIdRoute = CreadoresIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/hackathons': typeof HackathonsRoute
+  '/historial': typeof HistorialRoute
   '/promociones': typeof PromocionesRoute
   '/creadores/$id': typeof CreadoresIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/hackathons': typeof HackathonsRoute
+  '/historial': typeof HistorialRoute
   '/promociones': typeof PromocionesRoute
   '/creadores/$id': typeof CreadoresIdRoute
 }
@@ -51,20 +59,29 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/hackathons': typeof HackathonsRoute
+  '/historial': typeof HistorialRoute
   '/promociones': typeof PromocionesRoute
   '/creadores/$id': typeof CreadoresIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hackathons' | '/promociones' | '/creadores/$id'
+  fullPaths:
+    '/' | '/hackathons' | '/historial' | '/promociones' | '/creadores/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/hackathons' | '/promociones' | '/creadores/$id'
-  id: '__root__' | '/' | '/hackathons' | '/promociones' | '/creadores/$id'
+  to: '/' | '/hackathons' | '/historial' | '/promociones' | '/creadores/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/hackathons'
+    | '/historial'
+    | '/promociones'
+    | '/creadores/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HackathonsRoute: typeof HackathonsRoute
+  HistorialRoute: typeof HistorialRoute
   PromocionesRoute: typeof PromocionesRoute
   CreadoresIdRoute: typeof CreadoresIdRoute
 }
@@ -83,6 +100,13 @@ declare module '@tanstack/react-router' {
       path: '/hackathons'
       fullPath: '/hackathons'
       preLoaderRoute: typeof HackathonsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historial': {
+      id: '/historial'
+      path: '/historial'
+      fullPath: '/historial'
+      preLoaderRoute: typeof HistorialRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/promociones': {
@@ -105,6 +129,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HackathonsRoute: HackathonsRoute,
+  HistorialRoute: HistorialRoute,
   PromocionesRoute: PromocionesRoute,
   CreadoresIdRoute: CreadoresIdRoute,
 }
