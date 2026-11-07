@@ -8,6 +8,13 @@
       "when": 1793739313566,
       "tag": "0000_verified_stellar_payments",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794019042473,
+      "tag": "0001_exact_payment_amount",
+      "breakpoints": true
     }
   ]
 }
