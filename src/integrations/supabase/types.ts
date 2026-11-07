@@ -17,6 +17,7 @@ export type Database = {
       stellar_payments: {
         Row: {
           amount: number
+          amount_exact: string
           asset: string
           confirmed_at: string
           destination: string
@@ -29,6 +30,7 @@ export type Database = {
         }
         Insert: {
           amount: number
+          amount_exact: string
           asset?: string
           confirmed_at: string
           destination: string
@@ -41,6 +43,7 @@ export type Database = {
         }
         Update: {
           amount?: number
+          amount_exact?: string
           asset?: string
           confirmed_at?: string
           destination?: string
