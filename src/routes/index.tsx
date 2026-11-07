@@ -4,6 +4,7 @@ import { creators } from "@/lib/data";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
       { title: "Arceus — Micro-regalos para creadores en Stellar" },
       { name: "description", content: "Apoya a creadores y proyectos sociales con micro-regalos instantáneos en la red Stellar." },
       { property: "og:title", content: "Arceus — Micro-regalos en Stellar" },
@@ -19,7 +20,7 @@ function Index() {
       <section className="mb-14">
         <p className="mb-3 text-sm uppercase tracking-widest text-accent">Code Garden Collective</p>
         <h1 className="font-display text-5xl font-bold leading-tight md:text-6xl">
-          Apoya a quien crea.<br /><span className="text-primary">Directo, en 5 segundos.</span>
+          Arceus<br /><span className="text-primary">Apoya a quien crea.</span>
         </h1>
         <p className="mt-4 max-w-xl text-muted-foreground">
           Micro-regalos, donaciones y fondos comunitarios sobre Stellar. Sin intermediarios, con comisiones de fracciones de centavo.
@@ -36,12 +37,12 @@ function Index() {
           const pct = Math.round((c.goal.raised / c.goal.target) * 100);
           return (
             <Link key={c.id} to="/creadores/$id" params={{ id: c.id }} className="group rounded-xl border border-border bg-card p-5 transition hover:border-primary">
-              <div className="text-4xl">{c.emoji}</div>
+              <div className="text-4xl">{c.emoji}</div><p className="mt-2 text-xs font-semibold text-accent">DEMO</p>
               <h3 className="mt-3 font-display text-lg font-semibold group-hover:text-primary">{c.name}</h3>
               <p className="text-xs text-accent">{c.category}</p>
               <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{c.bio}</p>
               <div className="mt-4 h-1.5 rounded bg-muted"><div className="h-full rounded bg-primary" style={{ width: `${pct}%` }} /></div>
-              <p className="mt-1 text-xs text-muted-foreground">{pct}% · {c.goal.title}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{pct}% ilustrativo · {c.goal.title}</p>
             </Link>
           );
         })}
