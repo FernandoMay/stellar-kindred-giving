@@ -1,9 +1,9 @@
 # Arceus completion
-- [ ] Audit and document existing implementation.
-- [ ] Harden Testnet wallet and direct-payment verification; add regression tests.
-- [ ] Add persistent ledger-verified transaction history.
-- [ ] Deliver isolated Soroban escrow source, tests, threat model and Testnet deployment instructions.
-- [ ] Correct demo and escrow claims; verify pages and navigation.
-- [ ] Document acceptance evidence and remaining deployment/configuration blockers.
+- [x] Audit and document existing implementation.
+- [x] Harden Testnet wallet and direct-payment verification; add regression tests (real wallet signing still unverified).
+- [x] Add persistent ledger-verified transaction history (verified readback and duplicate reconciliation using an existing public payment).
+- [x] Deliver isolated Soroban escrow source, 17 passing native tests, threat model and Testnet deployment instructions; WASM requires user's Stellar CLI.
+- [x] Correct demo and escrow claims; verify pages and navigation.
+- [x] Document acceptance evidence and remaining deployment/configuration blockers.
 - [ ] Connect deployed escrow: blocked until user supplies Testnet contract ID and deployment evidence.
 - [ ] Activate real creator/campaign/sponsor records and gated content: blocked on actual public wallet addresses, content and campaign rules.

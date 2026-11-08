@@ -1,0 +1,3 @@
+# Asset and regulatory limitations
+Testnet XLM has no promised redeemable value. Current app supports native XLM only; USDC cashback/matching in DEMO offers is not implemented. Asset names alone do not verify issuers. Mainnet needs separate authorization, verified assets, third-party review, operational procedures and legal advice appropriate to donations, content distribution, sponsorships and local jurisdictions.
+No investment returns, guaranteed 3–5 second settlement, automatic subjective milestone validation or formal security certification is promised. Network conditions can delay final confirmation.
