@@ -15,7 +15,7 @@ Código fuente Rust; SDK fijado a 28.0.0 y Cargo.lock incluido. **17 pruebas de 
 - Hito subjetivo requiere revisión humana. La firma autoriza liberación; no certifica calidad.
 
 ## Compilar y probar en tu equipo
-Instala Rust con rustup y Stellar CLI según https://developers.stellar.org/docs/build/smart-contracts/getting-started/setup
+Instala Rust con rustup y Stellar CLI **25.2.0 o superior** según https://developers.stellar.org/docs/build/smart-contracts/getting-started/setup
 
 ```bash
 rustup target add wasm32v1-none
@@ -24,6 +24,7 @@ stellar contract build
 ```
 
 En el entorno Lovable usa `CARGO_TARGET_DIR=/tmp/arceus-rust-target cargo test --locked` para no incorporar binarios grandes al repositorio. El WASM estará en `target/wasm32v1-none/release/arceus_escrow.wasm` al compilar localmente.
+La compilación WASM aquí quedó bloqueada: SDK 28 exige `stellar contract build` con CLI >=25.2.0, ausente en este entorno. Las pruebas nativas sí compilaron y pasaron. El ZIP contiene fuente, no un WASM probado.
 
 ## Deploy — solo Testnet
 Desde esta carpeta:
