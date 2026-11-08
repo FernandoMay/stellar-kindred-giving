@@ -1,0 +1,9 @@
+# Threat model and limits
+- Malicious browser: RLS/GRANT allows SELECT only on financial rows. Reconciliation ignores amounts/status from caller and validates success, native asset, source, destination, ledger, operation count and exact hash from fixed Testnet Horizon.
+- Duplicate reconciliation: hash primary key and conflict-ignore keep one row. Duplicate transfer prevention is a local pending-hash guard, not distributed exactly-once delivery; independent tabs/wallets still require user review.
+- Network failure: submission exceptions do not prove failure. Pending hashes remain blocked until verified; unresolved failed/expired payments require manual ledger investigation before any new payment.
+- Wallet compromise: Freighter holds keys and must explicitly sign. Account/network are checked before preparation/signing; local UI does not authenticate off-chain profile ownership.
+- Public endpoint abuse: schema and fixed URLs limit input; requests use timeouts. No durable per-IP rate limiter yet; public hash endpoint can consume resources. Financial correctness does not solve availability attacks.
+- Contract: owner can cancel before release, approver can reject or misjudge deliverables; participants must trust disclosed approver. Contract verifies authorization, not subjective quality. Token selected by deployer is immutable; verify native SAC externally.
+- Storage: TTL requires maintenance/restoration; missing archived donor state must never be recreated while funded. Funds sent outside deposit are untracked and unrecoverable. Token behavior must match trusted native SAC; adversarial token reentrancy is outside supported deployment configuration.
+- No external audit, certification, Mainnet authorization, payout guarantees, USDC issuer verification or regulatory determination.

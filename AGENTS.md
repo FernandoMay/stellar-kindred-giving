@@ -8,3 +8,8 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep wallet/SDK calls in dynamically imported browser helpers and ledger verification in TanStack server functions; this separates wallet signatures from trusted settlement evidence.
+- Store only independently verified single-operation XLM ledger transactions in the public payment projection, uniquely keyed by hash, retaining decimal amount text; clients never write financial state.
+- Keep Soroban source isolated under contracts/arceus-escrow and compile with CARGO_TARGET_DIR outside the repository; generated Rust dependencies and test snapshots are not source deliverables.
+- Escrow campaigns have one full-release milestone, immutable token selection, independent donor refunds, an authorized approver and no admin sweep; this keeps refund accounting isolated and reviewable.
