@@ -14,6 +14,7 @@ export function Header() {
           <Link to="/promociones" className={link}>Promociones</Link>
           <Link to="/hackathons" className={link}>Hackathons</Link>
           <Link to="/historial" className={link}>Historial</Link>
+          <Link to="/perfil" className={link}>Mi perfil · NFTs</Link>
         </nav>
         <div className="ml-auto flex items-center gap-3">
           <span className="rounded-full border border-border px-2 py-0.5 text-xs text-accent">Testnet</span>

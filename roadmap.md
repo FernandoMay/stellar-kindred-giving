@@ -1,4 +1,8 @@
 # Arceus completion
+- [ ] Add donation collection profile using real verified payments and real NFT contract reads.
+- [ ] Deliver tested donation NFT contract with compilation and deployment instructions.
+- [ ] Remove sample creators, promotions, hackathons and fictional funding totals.
+- [ ] Connect deployed donation NFT: blocked until user supplies Testnet contract ID and deployment evidence.
 - [x] Audit and document existing implementation.
 - [x] Harden Testnet wallet and direct-payment verification; add regression tests (real wallet signing still unverified).
 - [x] Add persistent ledger-verified transaction history (verified readback and duplicate reconciliation using an existing public payment).
