@@ -22,6 +22,7 @@ export async function verifyDonationOutcome(contractId: string, hash: string, ow
   const result = await rpc.getTransaction(hash);
   if (result.status === "NOT_FOUND") return { status: "pending" as const };
   if (result.status === "FAILED") return { status: "failed" as const };
+  if (!("v1" in result.envelopeXdr)) throw new Error("Formato de transacción inesperado.");
   const tx = result.envelopeXdr.v1().tx();
   const operations = tx.operations();
   if (operations.length !== 1) throw new Error("La operación no corresponde a una donación NFT.");
