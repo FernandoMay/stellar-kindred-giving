@@ -5,7 +5,7 @@ import { ExternalLink, Leaf, RefreshCw, Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useWallet, short } from "@/lib/wallet";
 import { paymentHistory } from "@/lib/payments.functions";
-import { donationNfts } from "@/lib/donation.functions";
+import { donationNfts, donationOutcome } from "@/lib/donation.functions";
 import { donationContractId } from "@/lib/donation-config";
 import { outgoingMemories, totalXlm, type PaymentMemory } from "@/lib/donation-collection";
 import { EXPLORER, addressSchema, amountSchema } from "@/lib/payment-validation";
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/perfil")({ head: () => ({ meta: [
 ] }), component: DonorProfile });
 
 function DonorProfile() {
-  const w = useWallet(); const history = useServerFn(paymentHistory); const nftList = useServerFn(donationNfts);
+  const w = useWallet(); const history = useServerFn(paymentHistory); const nftList = useServerFn(donationNfts); const outcome = useServerFn(donationOutcome);
   const [address, setAddress] = useState(""); const [viewed, setViewed] = useState("");
   const [memories, setMemories] = useState<PaymentMemory[]>([]);
   const [nfts, setNfts] = useState<Awaited<ReturnType<typeof donationNfts>> | null>(null);
@@ -49,6 +49,18 @@ function DonorProfile() {
     } catch (e) { setNotice(e instanceof Error ? e.message : "No se pudo preparar la donación."); }
     finally { setBusy(false); }
   }
+  async function checkPending() {
+    if (!pending || !w.address) return;
+    setBusy(true);
+    try {
+      const result = await outcome({ data: { hash: pending, owner: w.address } });
+      if (result.status === "pending") { setNotice("Sin confirmación disponible; no repitas la donación."); return; }
+      localStorage.removeItem("arceus-pending-nft"); setPending(null);
+      if (result.status === "confirmed") { await load(w.address); setNotice(`Donación confirmada · NFT #${result.id}`); }
+      else setNotice("Stellar confirmó que la operación falló; no se creó el NFT.");
+    } catch { setNotice("No se pudo verificar este hash. Consérvalo; no repitas la donación."); }
+    finally { setBusy(false); }
+  }
   return <main className="mx-auto max-w-6xl px-4 py-10">
     <div className="flex flex-wrap items-end justify-between gap-4 border-b border-border pb-7">
       <div><p className="mb-2 text-sm text-accent">Arceus · Stellar Testnet</p><h1 className="font-display text-4xl font-bold">Mi jardín de aportaciones</h1><p className="mt-3 break-all text-sm text-muted-foreground">{viewed || w.address || "Billetera sin conectar"}</p></div>
@@ -65,6 +77,6 @@ function DonorProfile() {
       {viewed && nfts && (page > 0 || nfts.more) && <div className="mt-5 flex gap-3"><Button variant="outline" disabled={busy || page === 0} onClick={() => load(viewed, page - 1)}>Anterior</Button><Button variant="outline" disabled={busy || !nfts.more} onClick={() => load(viewed, page + 1)}>Siguiente</Button></div>}
     </section> : <section className="mt-6" aria-label="Recuerdos verificados"><p className="mb-5 text-sm text-muted-foreground">Pagos XLM salientes verificados, hasta 50 operaciones registradas. Estos recuerdos no son NFTs.</p>{!memories.length && <p className="border-y border-border py-10 text-center text-muted-foreground">Sin aportaciones verificadas cargadas.</p>}<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{memories.map((r) => <article key={r.hash} className="overflow-hidden rounded-lg border border-border bg-card"><img src={seed} alt="Semilla de cristal verde, recuerdo visual de una aportación" width={1024} height={1024} loading="lazy" className="aspect-square w-full object-cover" /><div className="p-5"><p className="text-xs text-accent">Recuerdo · no es un NFT</p><h2 className="mt-2 font-display text-xl">{r.amount_exact} XLM</h2><p className="mt-2 text-sm text-muted-foreground">Para {short(r.destination)} · Ledger {r.ledger}</p><a className="mt-4 inline-flex items-center gap-2 text-sm text-primary underline" href={`${EXPLORER}${r.hash}`} target="_blank" rel="noreferrer">Ver donación<ExternalLink className="size-3" /></a></div></article>)}</div><Link to="/historial" className="mt-6 inline-block text-sm text-primary underline">Verificar otra transacción</Link></section>}
     {donationContractId && <section className="mt-10 border-t border-border pt-6"><h2 className="font-display text-2xl">Donar y recibir NFT</h2><form className="mt-5 grid max-w-2xl gap-3" onSubmit={(e) => { e.preventDefault(); void donate(); }}><label htmlFor="nft-recipient">Destinatario Stellar</label><input id="nft-recipient" value={recipient} disabled={busy || Boolean(pending)} onChange={(e) => { setRecipient(e.target.value); setPrepared(null); }} className="rounded-md border bg-background px-3 py-2" /><label htmlFor="nft-amount">XLM</label><input id="nft-amount" value={amount} disabled={busy || Boolean(pending)} onChange={(e) => { setAmount(e.target.value); setPrepared(null); }} className="rounded-md border bg-background px-3 py-2" />{prepared && <p className="break-all text-sm">{prepared.amount} XLM → {prepared.recipient} · Comisión: {totalXlm([`${BigInt(prepared.fee) / 10000000n}.${(BigInt(prepared.fee) % 10000000n).toString().padStart(7, "0")}`])} XLM</p>}<Button disabled={busy || !w.address || Boolean(pending) || !addressSchema.safeParse(recipient.trim()).success || !amountSchema.safeParse(amount).success}>{prepared ? "Firmar donación y NFT" : "Revisar donación"}</Button></form></section>}
-    {pending && <p className="mt-6 break-all text-sm text-accent">Donación pendiente: <a className="underline" href={`${EXPLORER}${pending}`} target="_blank" rel="noreferrer">{pending}</a></p>}
+    {pending && <div className="mt-6"><p className="break-all text-sm text-accent">Donación pendiente: <a className="underline" href={`${EXPLORER}${pending}`} target="_blank" rel="noreferrer">{pending}</a></p><Button className="mt-3" variant="outline" disabled={busy || !w.address} onClick={checkPending}>Verificar donación pendiente</Button></div>}
   </main>;
 }
