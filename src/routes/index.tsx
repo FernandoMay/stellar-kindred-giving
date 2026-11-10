@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { creators } from "@/lib/data";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,13 +26,13 @@ function Index() {
         <p className="mt-4 max-w-xl text-muted-foreground">
           Micro-regalos, donaciones y fondos comunitarios sobre Stellar. Sin intermediarios, con comisiones de fracciones de centavo.
         </p>
-        <div className="mt-8 grid max-w-2xl grid-cols-3 gap-4 text-sm">
-          {[["1", "Conecta tu billetera"], ["2", "Elige un creador"], ["3", "Envía un regalo"]].map(([n, t]) => (
-            <div key={n} className="rounded-lg border border-border p-3"><span className="font-display text-2xl text-primary">{n}</span><p>{t}</p></div>
-          ))}
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Button asChild><Link to="/perfil">Mi perfil y NFTs</Link></Button>
+          <Button asChild variant="outline"><Link to="/historial">Consultar donaciones</Link></Button>
         </div>
       </section>
       <h2 className="mb-5 font-display text-2xl font-semibold">Creadores</h2>
+      {creators.length === 0 && <p className="border-y border-border py-8 text-muted-foreground">Todavía no hay creadores registrados con información real.</p>}
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {creators.map((c) => {
           const pct = Math.round((c.goal.raised / c.goal.target) * 100);

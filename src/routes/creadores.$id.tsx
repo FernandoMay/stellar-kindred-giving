@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { useState, useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { creators, giftTiers } from "@/lib/data";
@@ -8,6 +8,7 @@ import { amountSchema, EXPLORER } from "@/lib/payment-validation";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/creadores/$id")({
+  notFoundComponent: () => <main className="mx-auto max-w-6xl px-4 py-12"><h1 className="font-display text-3xl">Perfil no registrado</h1><p className="mt-4 text-muted-foreground">No hay información real para este creador.</p><Button asChild className="mt-6"><Link to="/perfil">Ir a mi perfil y NFTs</Link></Button></main>,
   loader: ({ params }) => { const c = creators.find((x) => x.id === params.id); if (!c) throw notFound(); return c; },
   head: ({ loaderData }) => ({ meta: [
     { title: `${loaderData?.name ?? "Creador"} en Arceus` },
