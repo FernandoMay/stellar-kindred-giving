@@ -15,3 +15,20 @@ export async function readDonationNfts(contractId: string, owner: string, page: 
   const items: DonationNft[] = records.slice(0, 12).map((r) => ({ id: String(r.id), owner: r.owner, recipient: r.recipient, amount: `${r.amount / 10000000n}.${(r.amount % 10000000n).toString().padStart(7, "0")}`, created_at: Number(r.created_at) }));
   return { items, more: records.length > 12 };
 }
+
+export async function verifyDonationOutcome(contractId: string, hash: string, owner: string) {
+  const sdk = await import("@stellar/stellar-sdk");
+  const rpc = new sdk.rpc.Server(STELLAR_RPC);
+  const result = await rpc.getTransaction(hash);
+  if (result.status === "NOT_FOUND") return { status: "pending" as const };
+  if (result.status === "FAILED") return { status: "failed" as const };
+  const tx = result.envelopeXdr.v1().tx();
+  const operations = tx.operations();
+  if (operations.length !== 1) throw new Error("La operación no corresponde a una donación NFT.");
+  const invocation = operations[0]?.body().invokeHostFunctionOp().hostFunction().invokeContract();
+  if (!invocation || sdk.Address.fromScAddress(invocation.contractAddress()).toString() !== contractId || invocation.functionName().toString() !== "donate") throw new Error("Contrato o función inesperada.");
+  const args = invocation.args();
+  if (!args[0] || sdk.scValToNative(args[0]) !== owner || !result.returnValue) throw new Error("Donante inesperado.");
+  const id = sdk.scValToNative(result.returnValue) as bigint;
+  return { status: "confirmed" as const, id: String(id) };
+}
