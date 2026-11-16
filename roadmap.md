@@ -2,12 +2,13 @@
 - [x] Add donation collection profile; real payment readback verified, NFT reads/signing prepared but deployed flow awaits contract.
 - [x] Deliver donation NFT source with 10 passing native tests and compilation/deployment instructions; WASM and real wallet flow not verified.
 - [x] Remove sample creators, promotions, hackathons and fictional funding totals; show unregistered state.
-- [ ] Connect deployed donation NFT: blocked until user supplies Testnet contract ID and deployment evidence.
+- [ ] Verify supplied deployments and connect donor-owned NFT reads and signing.
+- [ ] Connect verified escrow campaign 0 with wallet-authorized deposits and role actions.
+- [ ] Verify public NFT/campaign readback and document ownership corrections and signing limitations.
 - [x] Audit and document existing implementation.
 - [x] Harden Testnet wallet and direct-payment verification; add regression tests (real wallet signing still unverified).
 - [x] Add persistent ledger-verified transaction history (verified readback and duplicate reconciliation using an existing public payment).
 - [x] Deliver isolated Soroban escrow source, 17 passing native tests, threat model and Testnet deployment instructions; WASM requires user's Stellar CLI.
 - [x] Correct demo and escrow claims; verify pages and navigation.
 - [x] Document acceptance evidence and remaining deployment/configuration blockers.
-- [ ] Connect deployed escrow: blocked until user supplies Testnet contract ID and deployment evidence.
 - [ ] Activate real creator/campaign/sponsor records and gated content: blocked on actual public wallet addresses, content and campaign rules.

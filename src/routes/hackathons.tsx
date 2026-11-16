@@ -18,7 +18,7 @@ function Page() {
   return (
     <main className="mx-auto max-w-6xl px-4 py-12">
       <h1 className="font-display text-4xl font-bold">Hackathons y premios</h1>
-      <p className="mt-2 max-w-xl text-muted-foreground">No hay hackathons registrados. Contrato de custodia pendiente de despliegue.</p>
+      <p className="mt-2 max-w-xl text-muted-foreground">No hay hackathons registrados. El fondo comunitario está desplegado en Stellar Testnet; no constituye una bolsa de premios.</p>
       <div className="mt-8 space-y-4">
         {hackathons.map((h) => (
           <article key={h.name} className="flex flex-wrap items-center gap-6 rounded-xl border border-border bg-card p-6">

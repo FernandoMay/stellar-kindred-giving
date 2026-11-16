@@ -1,0 +1,7 @@
+import { expect, it } from "vitest";
+import { escrowActions, type Campaign } from "@/lib/escrow-rules";
+const c: Campaign = { owner: "owner", recipient: "recipient", approver: "approver", target: "100000000", deposited: "0", remaining: "0", deadline: 1802531837, state: "Funding" };
+it("campaign 0 can receive deposits before its supplied deadline", () => { expect(escrowActions(c, "donor", 1802531836, "0").deposit).toBe(true); expect(escrowActions(c, "donor", 1802531837, "0").deposit).toBe(false); });
+it("only the approver may release the fully funded 10 XLM campaign", () => { const funded = { ...c, deposited: "100000000" }; expect(escrowActions(funded, "approver", 1802531836, "0").release).toBe(true); expect(escrowActions(funded, "owner", 1802531836, "0").release).toBe(false); expect(escrowActions(c, "approver", 1802531836, "0").release).toBe(false); });
+it("donor refunds require a contribution and expiry or cancellation", () => { expect(escrowActions(c, "donor", 1802531836, "10000000").refund).toBe(false); expect(escrowActions(c, "donor", 1802531837, "10000000").refund).toBe(true); expect(escrowActions({ ...c, state: "Cancelled" }, "donor", 1802531836, "0").refund).toBe(false); });
+it("released funds cannot be refunded", () => { expect(escrowActions({ ...c, state: "Released" }, "donor", 1802531837, "10000000").refund).toBe(false); });

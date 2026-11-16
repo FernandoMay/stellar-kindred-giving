@@ -1,10 +1,11 @@
 import { STELLAR_RPC, type DonationNft } from "./donation-config";
 import { TESTNET_PASSPHRASE } from "./payment-validation";
+import { verifiedContract } from "./contracts.server";
 
 // No keys, signing, writes, or user-selected RPC endpoints in this reader.
 export async function readDonationNfts(contractId: string, owner: string, page: number) {
-  const sdk = await import("@stellar/stellar-sdk");
-  const rpc = new sdk.rpc.Server(STELLAR_RPC);
+  const { sdk, rpc, config } = await verifiedContract("nft");
+  if (contractId !== config.id) throw new Error("Contrato NFT inesperado.");
   const tx = new sdk.TransactionBuilder(new sdk.Account(owner, "0"), { fee: "100", networkPassphrase: TESTNET_PASSPHRASE })
     .addOperation(new sdk.Contract(contractId).call("list", new sdk.Address(owner).toScVal(), sdk.nativeToScVal(BigInt(page * 12), { type: "u64" }), sdk.nativeToScVal(13, { type: "u32" })))
     .setTimeout(60).build();
@@ -31,9 +32,15 @@ export async function verifyDonationOutcome(contractId: string, hash: string, ow
   const host = body.invokeHostFunctionOp.hostFunction;
   if (!("invokeContract" in host)) throw new Error("Invocación inesperada.");
   const invocation = host.invokeContract;
-  if (sdk.Address.fromScAddress(invocation.contractAddress).toString() !== contractId || invocation.functionName.toString() !== "donate") throw new Error("Contrato o función inesperada.");
+   if (sdk.Address.fromScAddress(invocation.contractAddress).toString() !== contractId || invocation.functionName.toString() !== "donate") throw new Error("Contrato o función inesperada.");
   const args = invocation.args;
   if (!args[0] || sdk.scValToNative(args[0]) !== owner || !result.returnValue) throw new Error("Donante inesperado.");
-  const id = sdk.scValToNative(result.returnValue) as bigint;
-  return { status: "confirmed" as const, id: String(id) };
+   const id = sdk.scValToNative(result.returnValue);
+   if (args.length !== 3 || typeof id !== "bigint" || id < 0n || !args[1] || !args[2]) throw new Error("Resultado NFT inválido.");
+   const recipient = sdk.scValToNative(args[1]); const amount = sdk.scValToNative(args[2]);
+   const verified = await verifiedContract("nft");
+   if (verified.config.id !== contractId) throw new Error("Contrato inesperado.");
+   const nft = await verified.call("get", [sdk.nativeToScVal(id, { type: "u64" })]);
+   if (nft.id !== id || nft.owner !== owner || nft.recipient !== recipient || nft.amount !== amount || typeof amount !== "bigint" || amount <= 0n) throw new Error("La propiedad NFT no coincide.");
+   return { status: "confirmed" as const, id: String(id) };
 }

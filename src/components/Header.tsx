@@ -13,6 +13,7 @@ export function Header() {
           <Link to="/" className={link} activeOptions={{ exact: true }}>Creadores</Link>
           <Link to="/promociones" className={link}>Promociones</Link>
           <Link to="/hackathons" className={link}>Hackathons</Link>
+          <Link to="/fondos" className={link}>Fondo comunitario</Link>
           <Link to="/historial" className={link}>Historial</Link>
           <Link to="/perfil" className={link}>Mi perfil · NFTs</Link>
         </nav>

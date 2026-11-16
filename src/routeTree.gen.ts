@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FondosRouteImport } from './routes/fondos'
 import { Route as HackathonsRouteImport } from './routes/hackathons'
 import { Route as HistorialRouteImport } from './routes/historial'
 import { Route as PerfilRouteImport } from './routes/perfil'
@@ -19,6 +20,11 @@ import { Route as CreadoresIdRouteImport } from './routes/creadores.$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FondosRoute = FondosRouteImport.update({
+  id: '/fondos',
+  path: '/fondos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HackathonsRoute = HackathonsRouteImport.update({
@@ -49,6 +55,7 @@ const CreadoresIdRoute = CreadoresIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/fondos': typeof FondosRoute
   '/hackathons': typeof HackathonsRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/fondos': typeof FondosRoute
   '/hackathons': typeof HackathonsRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/fondos': typeof FondosRoute
   '/hackathons': typeof HackathonsRoute
   '/historial': typeof HistorialRoute
   '/perfil': typeof PerfilRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/fondos'
     | '/hackathons'
     | '/historial'
     | '/perfil'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/fondos'
     | '/hackathons'
     | '/historial'
     | '/perfil'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/fondos'
     | '/hackathons'
     | '/historial'
     | '/perfil'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FondosRoute: typeof FondosRoute
   HackathonsRoute: typeof HackathonsRoute
   HistorialRoute: typeof HistorialRoute
   PerfilRoute: typeof PerfilRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fondos': {
+      id: '/fondos'
+      path: '/fondos'
+      fullPath: '/fondos'
+      preLoaderRoute: typeof FondosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hackathons': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FondosRoute: FondosRoute,
   HackathonsRoute: HackathonsRoute,
   HistorialRoute: HistorialRoute,
   PerfilRoute: PerfilRoute,

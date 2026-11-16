@@ -14,3 +14,4 @@
 - Keep Soroban source isolated under contracts/arceus-escrow and compile with CARGO_TARGET_DIR outside the repository; generated Rust dependencies and test snapshots are not source deliverables.
 - Escrow campaigns have one full-release milestone, immutable token selection, independent donor refunds, an authorized approver and no admin sweep; this keeps refund accounting isolated and reviewable.
 - Donation NFTs use atomic token transfer and non-transferable mint in an isolated Soroban contract; external payment hashes cannot authorize NFT issuance. Their server reader consults only the verified configured Testnet contract; never projects classic payment memories as NFTs.
+- Pin deployed contracts by address, WASM hash and native token on server reads; expose campaign state through a public server function and use wallet-authorized browser transactions with retained hashes for mutations, so neither clients nor submission timeouts assert settlement.
